@@ -13,8 +13,8 @@ var connection = mysql.createConnection({
 connection.connect(function (err) {
     if (err) throw err;
     console.log("connected as id " + connection.threadId);
-    afterConnection(); 
-   
+    afterConnection();
+
 });
 
 function afterConnection() {
@@ -25,111 +25,6 @@ function afterConnection() {
 
     });
 }
-
-// mainMenu();
-
-// function mainMenu(){
-//     inquirer
-//         .prompt([
-//             {
-//                 name: "choice",
-//                 type: "list",
-//                 message: "What would you like to do first?",
-//                 choices: [
-//                     {
-//                         name: "POST ITEM",
-//                         value: 1
-//                     }, 
-//                     {
-//                         name: "BID ON ITEM",
-//                         value: 2
-//                     }
-//                 ]
-//             }
-//         ])
-//         .then(function (response) {
-//                 if (response.choice === 1) {
-//                     //postItem();
-//                     postItem();
-//                 } else if (response.choice === 2) {
-//                     console.log("Cool! Lets check out the items")
-//                     readItems();
-//                 }
-//         });
-// }
-
-// function postItem() {
-//     inquirer
-//         .prompt([
-//             {
-//                 type: "input",
-//                 message: "Name of Item?",
-//                 name: "itemName"
-//             },
-//             {
-//                 type: "input",
-//                 message: "New or Used?",
-//                 name: "condition"
-//             },
-//             {
-//                 type: "input",
-//                 message: "Minimum Bid?",
-//                 name: "minBid"
-//             },
-//             {
-//                 type: "input",
-//                 message: "Category",
-//                 name: "cat"
-
-//         }]).then(function(responses) {
-//             addItem(responses.itemName, responses.minBid, responses.condition, responses.cat);
-//         });
-// }
-
-// function addItem(itemName, startBid, condition, cat) {
-//     connection.connect(function(err) {
-//         if (err) throw err;
-//         console.log("connected as id " + connection.threadId);
-
-//         console.log("Adding a new item...\n");
-//         var query = connection.query(
-//         "INSERT INTO items SET ?",
-//         {
-//             item: itemName,
-//             min_bid: startBid,
-//             item_condition: condition,
-//             category: cat
-//         },
-//         function(err, res) {
-//             console.log("Your post has been listed!")
-//             console.log(res.affectedRows + " item entered!\n");
-//             // Call updateProduct AFTER the INSERT completes
-//         }
-//         );
-//         connection.end();
-//     });
-//     // logs the actual query being run
-//     console.log(query.sql);
-// }
-
-// function readItems() {
-//     connection.connect(function(err) {
-//         if (err) throw err;
-//         console.log("connected as id " + connection.threadId);
-
-//         console.log("reading data...\n");
-//         var query = connection.query(
-//         "SELECT * FROM items",
-//         function(err, res) {
-//             console.log(res);
-//         }
-//         );
-//         connection.end();
-//     });
-//     // logs the actual query being run
-//     console.log(query.sql);
-// }
-
 
 function listItems() {
 
@@ -155,26 +50,33 @@ function listItems() {
             ])
             .then(function (answer) {
 
-                var quantityPicked = answer.bid; 
-                var itemPicked = answer.choice.split(":")[0]; 
-                
-function updateSql(){
+                var quantityPicked = answer.bid;
+                var itemPicked = answer.choice.split(":")[0];
 
-    
-}
+                function updateSql() {
+                    connection.query("UPDATE products SET ? WHERE ?",
+                        [
+                            { stock_quantity: quantityPicked },
+                            { id: itemPicked.id },
+                        ]),
 
-                console.log(itemPicked);
-                console.log(quantityPicked);
-                 
 
+
+                    console.log(itemPicked);
+                    console.log(quantityPicked);
+                    console.log("Item Ordered")
+
+
+                    
+
+                }
+                updateSql(); 
                 connection.end();
 
             })
 
-    })
-
-};
+    });
 
 
 
-
+}
